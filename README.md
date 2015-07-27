@@ -11,7 +11,7 @@ I. UNITS:
 
 1. Hero: Controled by players.
 2. Shop Keeper: Sells items to players.
-3. Speed Ball: Spawns at load, can be intereacted with to smash enemies and self (watch out!).
+3. Speed Ball: Spawns at load, can be intereacted with to smash enemies and other speed balls (watch out!).
 
 =====================
 II. Abilities:
