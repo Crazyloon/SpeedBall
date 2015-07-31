@@ -8,8 +8,8 @@
 		// General
 		//
 		"BaseClass"					"npc_dota_creature"	// Class of entity of link to.
-		"Model"						"models/heroes/phoenix/phoenix_egg.vmdl" //"models/heroes/oracle/crystal_ball.vmdl"	// Model.
-		"ModelScale"				"1"
+		"Model"						"models/items/furion/dark_staff/bulb.vmdl" //"models/heroes/oracle/crystal_ball.vmdl"	// Model.
+		"ModelScale"				".6"
 		"SoundSet"					"Creep_Good_Range"					// Name of sound set.
 		"Level"						"0"
 		"UnitLabel"					"speedball"

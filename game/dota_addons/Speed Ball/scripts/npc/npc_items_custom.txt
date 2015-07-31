@@ -12,6 +12,7 @@
 		"BaseClass"						"item_datadriven"
 		"AbilityCastAnimation"			"ACT_DOTA_DISABLED"
 		"AbilityTextureName"			"item_example_item"
+		"AbilityType"					"DOTA_ABILITY_TYPE_BASIC"
 
 		// Stats
 		//-------------------------------------------------------------------------------------------------------------
@@ -46,8 +47,8 @@
 			{
 				"EffectName"			"particles/frostivus_herofx/queen_shadow_strike_linear_parent.vpcf"
 				"MoveSpeed"				"%speed"
-				//"StartPosition"	  "attach_attack1"
-				"FixedDistance"   "%distance"
+				"StartPosition"	        "attach_attack1"
+				"FixedDistance"   		"%distance"
 				"StartRadius"			"%radius"
 				"EndRadius"				"%radius"
 				"TargetTeams"			"DOTA_UNIT_TARGET_TEAM_ENEMY"

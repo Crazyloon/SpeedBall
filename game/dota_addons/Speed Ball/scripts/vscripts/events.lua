@@ -1,6 +1,9 @@
 -- This file contains all barebones-registered events and has already set up the passed-in parameters for your use.
 -- Do not remove the GameMode:_Function calls in these events as it will mess with the internal barebones systems.
 
+-- This library can be used for sending panorama notifications to the UIs of players/teams/everyone
+require('libraries/notifications')
+
 -- Cleanup a player when they leave
 function GameMode:OnDisconnect(keys)
   DebugPrint('[BAREBONES] Player Disconnected ' .. tostring(keys.userid))
@@ -28,12 +31,26 @@ function GameMode:OnNPCSpawned(keys)
   DebugPrint("[BAREBONES] NPC Spawned")
   DebugPrintTable(keys)
 
-
-
   -- This internal handling is used to set up main barebones functions
   GameMode:_OnNPCSpawned(keys)
-
   local npc = EntIndexToHScript(keys.entindex)
+  
+
+  -- Put your code here:
+  -- When a hero spawns, check their remaining lives and disable respanw if they're out. cast magic shield on them.
+  if npc:IsRealHero() then
+    local playerID = npc:GetPlayerID()
+    local playerLives = npc.lives -- PLAYER_LIVES[playerID]
+    if npc.lives == 0 then
+      npc:SetRespawnsDisabled(true)
+    elseif npc.lives < MAX_LIVES then
+      DebugPrint("[NOTIFICATION] PlayerLives")
+      -- Send a notification to playerID 0 which will display up top for 9 seconds and be green, on a new line as the previous notification
+      Notifications:Top(playerID, {text="You have " .. playerLives .. " lives remaining.", duration=5.0, style={color="green"}, continue=true})
+      npc:AddNewModifier(npc, nil, "modifier_omniknight_repel", {duration = 3})
+      StartSoundEvent("Hero_Omniknight.Purification", PlayerResource:GetPlayer(playerID))
+    end
+  end
 end
 
 -- An entity somewhere has been hurt.  This event fires very often with many units so don't do too many expensive
@@ -94,7 +111,7 @@ end
 -- An ability was used by a player
 function GameMode:OnAbilityUsed(keys)
   DebugPrint('[BAREBONES] AbilityUsed')
-  DebugPrintTable(keys)
+  --DebugPrintTable(keys)
 
   local player = PlayerResource:GetPlayer(keys.PlayerID)
   local abilityname = keys.abilityname
@@ -247,14 +264,20 @@ function GameMode:OnEntityKilled( keys )
   -- Put code here to handle when an entity gets killed
   local killedUnitOwner = killedUnit:GetOwner()
   local killerUnitOwner = killerEntity:GetOwner()
-  DebugPrint('[GET KILLER/KILLED OWNER SUCCESSFUL] ')
+  DebugPrint('[GET KILLER/KILLED OWNERS] ')
+  DebugPrint(tostring(killedUnitOwner) .. tostring(killedUnitOwner))
 
-  if killedUnit:GetOwner() == killerEntity:GetOwner() then
-    DebugPrint("killed: " .. tostring(killedUnit:GetPlayerOwnerID()) .. " killer: " .. tostring(killerEntity:GetPlayerOwnerID()))
-  else
-    DebugPrint("killedUnitOwner/TeamNumber: " .. DebugPrint(tostring(killedUnit:GetOwner())) .. DebugPrint(tostring(killedUnit:GetTeamNumber())) .. " killerOwner/TeamNumber: " .. DebugPrint(killerEntity:GetOwner()) .. DebugPrint(killerEntity:GetTeamNumber()) )
+  if killedUnit:IsRealHero() then
+    DebugPrint("LIVES BEFORE: " .. killedUnit.lives)
+    killedUnit.lives = killedUnit.lives - 1
+    DebugPrint("LIVES AFTER: " .. killedUnit.lives)
   end
 
+  -- This is used to remove a charge from the players 'lives' ability
+        -- local playerLivesAbility = killedUnit:GetAbilityByIndex(3)
+        -- local stackCount = killedUnit:GetModifierStackCount("modifier_lives", nil)
+        -- DebugPrint("Modifier Stack Count: " .. tostring(stackCount))
+        -- killedUnit:SetModifierStackCount("modifier_lives", hero, stackCount - 1)
 end
 
 
@@ -309,7 +332,7 @@ end
 -- This function is called whenever an ability begins its PhaseStart phase (but before it is actually cast)
 function GameMode:OnAbilityCastBegins(keys)
   DebugPrint('[BAREBONES] OnAbilityCastBegins')
-  DebugPrintTable(keys)
+  --DebugPrintTable(keys)
 
   local player = PlayerResource:GetPlayer(keys.PlayerID)
   local abilityName = keys.abilityname
