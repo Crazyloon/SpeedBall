@@ -4,10 +4,11 @@
   </styles>
   <Panel class="AddonLoadingRoot">
     <Panel id="CustomBg" >
-      <Image id="gamemode" class="SeqImg" src="file://{images}/custom_game/loading_screen/gamemode.png" />
+      <Image id="gamemode" class="SeqImg" src="file://{images}/custom_game/loading_screen/speedball_04.png" />
     </Panel>
-    <Panel id="TitlePanel">
-      <Label id="AddonTitle" text="#addon_game_name" style="" />
+    <Panel id="TitlePanel">      
+      <Label id="AddonTitle" text="Built using: " style="" />
+      <Image id="gamemodelower" src="file://{images}/custom_game/loading_screen/gamemode_2.png" />
     </Panel>
   </Panel>
 </root>

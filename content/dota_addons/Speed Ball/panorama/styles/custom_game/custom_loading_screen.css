@@ -17,15 +17,14 @@
   vertical-align: bottom;
   margin-bottom: 150px;
   margin-left: 100px;
-  flow-children: right;
+  flow-children: down;
 }
 
 #AddonTitle
 {
   margin-bottom: -15px;
   vertical-align: center;
-  text-transform: uppercase;
-  font-size: 80px;
+  font-size: 25px;
   color: #cccccc;
   text-shadow: 2px 2px 2px #000000;
 }
@@ -53,6 +52,14 @@
 #gamemode
 {
   margin-left: 160px;
+  /*margin-bottom: 0px;*/
+  
+}
+
+#gamemodelower
+{
+  margin-left: 100px;
+  margin-top: 20px;
   /*margin-bottom: 0px;*/
   
 }
