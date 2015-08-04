@@ -1,0 +1,20 @@
+//-------------------
+// Dummy stuff
+//-------------------
+  
+"ballcrash"
+{
+	"AbilityBehavior" 				"DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
+	"BaseClass" 					"ability_datadriven"
+	"AbilityTextureName"            "rubick_empty1"
+	"MaxLevel"                      "1"
+
+	"OnSpellStart"
+	{
+		"RunScript"
+		{
+			"ScriptFile"			"scripts/vscripts/npc_abilities_custom.lua"
+			"Function"				"ball_crash_into_player"
+		}
+	}
+}

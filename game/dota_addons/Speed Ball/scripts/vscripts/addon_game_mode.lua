@@ -40,9 +40,12 @@ function Precache( context )
   --- SPEEDBALL PRECACHE
   -- PrecacheResource('Type', 'fileext', context)
   -- PrecacheResource('Valid Modes: particle, particle_folder, model, model_folder, and soundfile', '.vpcf, .vsnd, .vsndevts', context)
-  -- PARTICLES
+  -- PARTICLE
+  
+  PrecacheResource('particle', 'particles/econ/items/spirit_breaker/spirit_breaker_iron_surge/spirit_breaker_charge_iron.vpcf', context)
   PrecacheResource('particle', 'particles/units/heroes/hero_omniknight/omniknight_repel_buff.vpcf', context)
-  PrecacheResource('particle', 'particles/econ/courier/courier_platinum_roshan/platinum_roshan_ambient_e.vpcf', context)
+  PrecacheResource('particle', 'particles/econ/courier/courier_platinum_roshan/platinum_roshan_ambient.vpcf', context)
+  PrecacheResource('particle', 'particles/generic_gameplay/generic_stunned.vpcf', context)
 
   -- SOUND
   --PrecacheResource('soundfile', 'sounds/weapons/hero/omniknight/purification.vsnd', context)

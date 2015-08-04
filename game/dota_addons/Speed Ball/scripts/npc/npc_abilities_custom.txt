@@ -1,20 +1,16 @@
-// DataDriven Ability Guide: https://moddota.com/forums/discussion/14/datadriven-ability-breakdown-documentation
-
 "DOTAAbilities"
 {
-	"Version"		"1"
-	  
 	//-------------------
 	// Dummy stuff
 	//-------------------
-  
+	  
 	"ballcrash"
 	{
 		"AbilityBehavior" 				"DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
 		"BaseClass" 					"ability_datadriven"
 		"AbilityTextureName"            "rubick_empty1"
 		"MaxLevel"                      "1"
-
+	
 		"OnSpellStart"
 		{
 			"RunScript"
@@ -24,111 +20,13 @@
 			}
 		}
 	}
-
-	"propel_ball"
-	{
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
-		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
-		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_CREEP"
-		"BaseClass"						"ability_datadriven"
-		"AbilityTextureName"			"chaos_knight_chaos_bolt"
-		"MaxLevel"						"1"
-
-		// Stats
-		//-------------------------------------------------------------------------------------------------------------
-		"AbilityCastRange"				"100"
-		"AbilityCastPoint"				"0.4"
-		"AbilityCooldown"				"1"
-		"AbilityCastAnimation"			"ACT_DOTA_ATTACK"
-
-		"AbilityManaCost"				"0"
-		
-		"precache"
-		{
-			"soundfile"					"sounds/weapons/hero/tinker/attack.vsnd"
-			"soundfile"					"sounds/weapons/hero/tinker/laser.vsnd"
-		}
-
-		"OnSpellStart"
-		{
-			"RunScript"
-			{
-				"Target"				"TARGET"
-				"ScriptFile"			"scripts/vscripts/ability_propel_ball.lua"
-				"Function"				"propel_ball"
-			}
-
-			"RunScript"
-			{
-				"Target"				"CASTER"
-				"ScriptFile" 			"scripts/vscrips/ability_propel_ball.lua"
-				"Function"				"play_attack_sound"
-			}
-		}
-	}
-
-	"player_lives"
-	{
-	    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_PASSIVE"
-	    "BaseClass"           	"ability_datadriven"
-	    "AbilityTextureName"    "holdout_blade_fury"
-	    "MaxLevel"				"1"
-	    "AbilityType"			"DOTA_ABILITY_TYPE_BASIC"
-
-	    // Stats
-	    //-------------------------------------------------------------------------------------------------------------
-	    "AbilityCastPoint"      	"0.0"
-	    "AbilityCooldown"       	"1"
-	    "AbilityCastAnimation"      "ACT_DOTA_DISABLED"
-	    "AbilityManaCost"			"0"
-	    
-	    "OnAbilityStart"
-        {
-          "ApplyModifier"
-          {
-      		"Target"	"modifier_lives"
-      		"lives"		"%lives"
-          }
-        }
-
-    	"Modifiers"
-	    {
-	      "modifier_lives"
-	      {
-      		"Passive"	"1"
-      		"IsBuff"	"1"
-	        
-	        "OnRespawn"
-	        {
-	          "ApplyModifier"
-	          {
-	          	"ModifierName" 	"modifier_lives"
-	          	"Target"		"CASTER"
-	          	"lives" 		"%lives"
-	          }	
-	        }
-	      }
-	    }
-
-	    // Special  
-	    //-------------------------------------------------------------------------------------------------------------
-	    "AbilitySpecial"
-	    {
-	      "01"
-	      {
-	        "var_type"		"FIELD_INTEGER"
-	        "lives"        	"5"
-	      }
-	    }
-  	}
-
-  	"example_ability"
+	"example_ability"
 	{
 	    "ID"              "1852"
 	    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_CHANNELLED"
 	    "BaseClass"           "ability_datadriven"
 	    "AbilityTextureName"      "holdout_blade_fury"
-
+	
 	    // Stats
 	    //-------------------------------------------------------------------------------------------------------------
 	    "AbilityCastRange"        "1000"
@@ -144,7 +42,7 @@
 	      "particle"          "particles/econ/generic/generic_aoe_explosion_sphere_1/generic_aoe_explosion_sphere_1.vpcf"
 	      "soundfile"         "soundevents/game_sounds_heroes/game_sounds_gyrocopter.vsndevts"
 	    }
-
+	
 	    // Item Info
 	    //-------------------------------------------------------------------------------------------------------------
 	    "AbilityManaCost"       "300"
@@ -258,7 +156,7 @@
 	            }
 	          }
 	        }
-
+	
 	      }
 	    }
 	    
@@ -296,6 +194,138 @@
 	        "height"        "100 200 300 400"
 	      }
 	    }
+	  	}
+	"player_lives"
+	{
+	    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_PASSIVE"
+	    "BaseClass"           	"ability_datadriven"
+	    "AbilityTextureName"    "holdout_blade_fury"
+	    "MaxLevel"				"1"
+	    "AbilityType"			"DOTA_ABILITY_TYPE_BASIC"
+	
+	    // Stats
+	    //-------------------------------------------------------------------------------------------------------------
+	    "AbilityCastPoint"      	"0.0"
+	    "AbilityCooldown"       	"1"
+	    "AbilityCastAnimation"      "ACT_DOTA_DISABLED"
+	    "AbilityManaCost"			"0"
+	    
+	    "OnAbilityStart"
+	        {
+	          "ApplyModifier"
+	          {
+	      		"Target"	"modifier_lives"
+	      		"lives"		"%lives"
+	          }
+	        }
+	
+	    	"Modifiers"
+	    {
+	      "modifier_lives"
+	      {
+	      		"Passive"	"1"
+	      		"IsBuff"	"1"
+	        
+	        "OnRespawn"
+	        {
+	          "ApplyModifier"
+	          {
+	          	"ModifierName" 	"modifier_lives"
+	          	"Target"		"CASTER"
+	          	"lives" 		"%lives"
+	          }	
+	        }
+	      }
+	    }
+	
+	    // Special  
+	    //-------------------------------------------------------------------------------------------------------------
+	    "AbilitySpecial"
+	    {
+	      "01"
+	      {
+	        "var_type"		"FIELD_INTEGER"
+	        "lives"        	"5"
+	      }
+	    }
   	}
-}
 
+	"propel_ball"
+	{
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_CREEP"
+		"BaseClass"						"ability_datadriven"
+		"AbilityTextureName"			"chaos_knight_chaos_bolt"
+		"MaxLevel"						"1"
+	
+		// Stats
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCastRange"				"100"
+		"AbilityCastPoint"				"0.4"
+		"AbilityCooldown"				"1"
+		"AbilityCastAnimation"			"ACT_DOTA_ATTACK"
+	
+		"AbilityManaCost"				"0"
+		
+		"precache"
+		{
+			"soundfile"					"sounds/weapons/hero/tinker/attack.vsnd"
+			"soundfile"					"sounds/weapons/hero/tinker/laser.vsnd"
+		}
+	
+		"OnSpellStart"
+		{
+			"RunScript"
+			{
+				"Target"				"TARGET"
+				"ScriptFile"			"scripts/vscripts/ability_propel_ball.lua"
+				"Function"				"propel_ball"
+			}
+			"FireSound"
+			{
+				"EffectName"	"Hero_Tinker.Laser"
+				"Target" 		"CASTER"
+			}
+		}	
+	}
+	"ranged_propel"
+	{
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_CREEP"
+		"BaseClass"						"ability_datadriven"
+		"AbilityTextureName"			"chaos_knight_chaos_bolt"
+		"MaxLevel"						"1"
+	
+		// Stats
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCastRange"				"100"
+		"AbilityCastPoint"				"0.4"
+		"AbilityCooldown"				"1"
+		"AbilityCastAnimation"			"ACT_DOTA_ATTACK"
+	
+		"AbilityManaCost"				"0"
+		
+		"precache"
+		{
+			"soundfile"					"sounds/weapons/hero/tinker/attack.vsnd"
+			"soundfile"					"sounds/weapons/hero/tinker/laser.vsnd"
+		}
+	
+		"OnSpellStart"
+		{
+			"RunScript"
+			{
+				"Target"				"TARGET"
+				"ScriptFile"			"scripts/vscripts/ability_propel_ball.lua"
+				"Function"				"propel_ball"
+			}
+			"FireSound"
+			{
+				"EffectName"	"Hero_Tinker.Laser"
+				"Target" 		"CASTER"
+			}
+		}	
+	}
+}

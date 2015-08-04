@@ -2,7 +2,7 @@
 {
 	"npc_dota_hero_antimage"
 	{
-		"AbilityLayout" 		"4"
+		"AbilityLayout" 		"2"
 		"override_hero"			"npc_dota_hero_antimage"
 		"SoundSet"				"0"	
 		"Ability1"				"propel_ball" 
@@ -21,14 +21,14 @@
 		"Ability14"				""
 		"Ability15"				""
 		"Ability16"				""
-
+	
 		"ArmorPhysical"				"0"									// Physical protection.
-		"MagicalResistance"				"0"									// Magical protection (percentage).
-
+		"MagicalResistance"			"0"									// Magical protection (percentage).
+	
 		"AttackCapabilities"		"DOTA_UNIT_CAP_NO_ATTACK"
 		"AttackDamageMin"			"1"										// Damage range min.
 		"AttackDamageMax"			"1"										// Damage range max.
-
+	
 		//"AttributePrimary"			"DOTA_ATTRIBUTE_STRENGTH"
 		"AttributeBaseStrength"		"0"										// Base strength
 		"AttributeStrengthGain"		"0"										// Strength bonus per level.
@@ -36,23 +36,23 @@
 		"AttributeIntelligenceGain"	"0"										// Intelligence bonus per level.
 		"AttributeBaseAgility"		"0"										// Base agility
 		"AttributeAgilityGain"		"0"										// Agility bonus per level.
-
+	
 		"BountyXP"					"0"									// Experience earn.
 		"BountyGoldMin"				"0"										// Gold earned min.
 		"BountyGoldMax"				"0"										// Gold earned max.
-
-		//"BoundsHullName"			"DOTA_HULL_SIZE_HERO"
-		//"RingRadius"				"70"
-
+	
+		"BoundsHullName"			"DOTA_HULL_SIZE_HERO"
+		"RingRadius"				"90"
+	
 		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_GROUND"
-		"MovementSpeed"				"360"									// Speed.
-		"MovementTurnRate"			"1.0"									// Turning rate.
-
+		"MovementSpeed"				"380"									// Speed.
+		"MovementTurnRate"			"0.5"									// Turning rate.
+	
 		"StatusHealth"				"981"									// Base health.
-		"StatusHealthRegen"			"0.0"									// Health regeneration rate.
-		"StatusMana"				"387"										// Base mana.
-		"StatusManaRegen"			"99.96"									// Mana regeneration rate.
-
-		"VisionNighttimeRange"		"1800"									// Range of vision at night time.
+		"StatusHealthRegen"			"1.0"									// Health regeneration rate.
+		"StatusMana"				"420"										// Base mana.
+		"StatusManaRegen"			"100"									// Mana regeneration rate.
+	
+		"VisionNighttimeRange"		"2100"									// Range of vision at night time.
 	}
 }
