@@ -15,27 +15,9 @@ function Precache( context )
   ]]
 
   DebugPrint("[BAREBONES] Performing pre-load precache")
-  -- BAREBONES PRECACHE
-  -- Particles can be precached individually or by folder
-  -- It it likely that precaching a single particle system will precache all of its children, but this may not be guaranteed
-  PrecacheResource("particle", "particles/econ/generic/generic_aoe_explosion_sphere_1/generic_aoe_explosion_sphere_1.vpcf", context)
-  PrecacheResource("particle_folder", "particles/test_particle", context)
-
   -- Models can also be precached by folder or individually
   -- PrecacheModel should generally used over PrecacheResource for individual models
   PrecacheResource("model_folder", "particles/heroes/antimage", context)
-
-  -- Entire items can be precached by name
-  -- Abilities can also be precached in this way despite the name
-  PrecacheItemByNameSync("example_ability", context)
-  PrecacheItemByNameSync("item_example_item", context)
-
-  -- Entire heroes (sound effects/voice/models/particles) can be precached with PrecacheUnitByNameSync
-  -- Custom units from npc_units_custom.txt can also have all of their abilities and precache{} blocks precached in this way
-  PrecacheUnitByNameSync("npc_dota_hero_ancient_apparition", context)
-  PrecacheUnitByNameSync("npc_dota_hero_enigma", context)
-
-
 
   --- SPEEDBALL PRECACHE
   -- PrecacheResource('Type', 'fileext', context)
@@ -45,7 +27,18 @@ function Precache( context )
   PrecacheResource('particle', 'particles/econ/items/spirit_breaker/spirit_breaker_iron_surge/spirit_breaker_charge_iron.vpcf', context)
   PrecacheResource('particle', 'particles/units/heroes/hero_omniknight/omniknight_repel_buff.vpcf', context)
   PrecacheResource('particle', 'particles/econ/courier/courier_platinum_roshan/platinum_roshan_ambient.vpcf', context)
+  PrecacheResource('particle', 'particles/force_propulsion/force_propulsion_dark.vpcf', context)
+  PrecacheResource('particle', 'particles/units/heroes/hero_tinker/tinker_base_attack.vpcf', context)
   PrecacheResource('particle', 'particles/generic_gameplay/generic_stunned.vpcf', context)
+  --TESTING
+  PrecacheResource('particle', 'particles/base_attacks/ranged_tower_good.vpcf', context)
+  PrecacheResource('particle', 'particles/dire_fx/tower_bad_face.vpcf', context)
+  PrecacheResource('particle', 'particles/econ/courier/courier_drodo/courier_drodo_ambient_death.vpcf', context)
+  --PrecacheResource('particle', 'particles/generic_gameplay/generic_stunned.vpcf', context)
+  --PrecacheResource('particle', 'particles/generic_gameplay/generic_stunned.vpcf', context)
+
+  
+
 
   -- SOUND
   --PrecacheResource('soundfile', 'sounds/weapons/hero/omniknight/purification.vsnd', context)
@@ -57,7 +50,8 @@ function Precache( context )
   PrecacheResource('soundfile', 'soundevents/music/dsadowski_01/soundevents_music.vsndevts', context)
   PrecacheResource('soundfile', 'soundevents/music/jbrice_01/soundevents_music.vsndevts', context)
   PrecacheResource('soundfile', 'soundevents/music/valve_ti5/soundevents_music.vsndevts', context)
-
+  --PrecacheResource('soundfile', 'soundevents/game_sounds_heroes/game_sounds_abaddon.vsndevts', context)
+  PrecacheResource('soundfile', 'soundevents/game_sounds_heroes/game_sounds_disruptor.vsndevts', context)
   -- ITEMS
   -- UNITS
   -- MODELS

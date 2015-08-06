@@ -197,46 +197,46 @@
 	  	}
 	"player_lives"
 	{
-	    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_PASSIVE"
-	    "BaseClass"           	"ability_datadriven"
-	    "AbilityTextureName"    "holdout_blade_fury"
-	    "MaxLevel"				"1"
-	    "AbilityType"			"DOTA_ABILITY_TYPE_BASIC"
-	
-	    // Stats
-	    //-------------------------------------------------------------------------------------------------------------
-	    "AbilityCastPoint"      	"0.0"
-	    "AbilityCooldown"       	"1"
-	    "AbilityCastAnimation"      "ACT_DOTA_DISABLED"
-	    "AbilityManaCost"			"0"
-	    
-	    "OnAbilityStart"
-	        {
-	          "ApplyModifier"
-	          {
-	      		"Target"	"modifier_lives"
-	      		"lives"		"%lives"
-	          }
-	        }
-	
-	    	"Modifiers"
-	    {
-	      "modifier_lives"
-	      {
-	      		"Passive"	"1"
-	      		"IsBuff"	"1"
-	        
-	        "OnRespawn"
-	        {
-	          "ApplyModifier"
-	          {
-	          	"ModifierName" 	"modifier_lives"
-	          	"Target"		"CASTER"
-	          	"lives" 		"%lives"
-	          }	
-	        }
-	      }
-	    }
+  	"AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_PASSIVE"
+    "BaseClass"           	"ability_datadriven"
+    "AbilityTextureName"    "holdout_blade_fury"
+    "MaxLevel"				"1"
+    "AbilityType"			"DOTA_ABILITY_TYPE_BASIC"
+
+    // Stats
+    //-------------------------------------------------------------------------------------------------------------
+    "AbilityCastPoint"      	"0.0"
+    "AbilityCooldown"       	"1"
+    "AbilityCastAnimation"      "ACT_DOTA_DISABLED"
+    "AbilityManaCost"			"0"
+    
+    "OnAbilityStart"
+    {
+      "ApplyModifier"
+      {
+  		"Target"	"modifier_lives"
+  		"lives"		"%lives"
+      }
+    }
+
+  	"Modifiers"
+    {
+      "modifier_lives"
+      {
+    		"Passive"	"1"
+    		"IsBuff"	"1"
+        
+        "OnRespawn"
+        {
+          "ApplyModifier"
+          {
+          	"ModifierName" 	"modifier_lives"
+          	"Target"		"CASTER"
+          	"lives" 		"%lives"
+          }	
+        }
+      }
+    }
 	
 	    // Special  
 	    //-------------------------------------------------------------------------------------------------------------
@@ -247,16 +247,15 @@
 	        "var_type"		"FIELD_INTEGER"
 	        "lives"        	"5"
 	      }
-	    }
-  	}
-
+    	}
+		}
 	"propel_ball"
 	{
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
 		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
 		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_CREEP"
 		"BaseClass"						"ability_datadriven"
-		"AbilityTextureName"			"chaos_knight_chaos_bolt"
+		"AbilityTextureName"			"disruptor_thunder_strike"
 		"MaxLevel"						"1"
 	
 		// Stats
@@ -279,7 +278,7 @@
 			"RunScript"
 			{
 				"Target"				"TARGET"
-				"ScriptFile"			"scripts/vscripts/ability_propel_ball.lua"
+				"ScriptFile"			"scripts/vscripts/spells/ability_propel_ball.lua"
 				"Function"				"propel_ball"
 			}
 			"FireSound"
@@ -287,7 +286,8 @@
 				"EffectName"	"Hero_Tinker.Laser"
 				"Target" 		"CASTER"
 			}
-		}	
+		}
+	
 	}
 	"ranged_propel"
 	{
@@ -295,22 +295,22 @@
 		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
 		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_CREEP"
 		"BaseClass"						"ability_datadriven"
-		"AbilityTextureName"			"chaos_knight_chaos_bolt"
-		"MaxLevel"						"1"
+		"AbilityTextureName"			"abaddon_aphotic_shield"
+		"MaxLevel"						"3"
 	
 		// Stats
 		//-------------------------------------------------------------------------------------------------------------
-		"AbilityCastRange"				"100"
-		"AbilityCastPoint"				"0.4"
-		"AbilityCooldown"				"1"
+		"AbilityCastRange"				"1000 1200 1400"
+		"AbilityCastPoint"				"0.3"
+		"AbilityCooldown"				"5 5 5"
 		"AbilityCastAnimation"			"ACT_DOTA_ATTACK"
 	
-		"AbilityManaCost"				"0"
+		"AbilityManaCost"				"60"
 		
 		"precache"
 		{
-			"soundfile"					"sounds/weapons/hero/tinker/attack.vsnd"
-			"soundfile"					"sounds/weapons/hero/tinker/laser.vsnd"
+			"soundfile"					"sounds/weapons/hero/disruptor/thunder_strike_cast.vsnd"
+			"soundfile"					"sounds/weapons/hero/disruptor/thunder_strike_target.vsnd"
 		}
 	
 		"OnSpellStart"
@@ -318,14 +318,214 @@
 			"RunScript"
 			{
 				"Target"				"TARGET"
-				"ScriptFile"			"scripts/vscripts/ability_propel_ball.lua"
-				"Function"				"propel_ball"
+				"ScriptFile"			"scripts/vscripts/spells/ability_propel_ball.lua"
+				"Function"				"propel_ball_ranged"
 			}
 			"FireSound"
 			{
-				"EffectName"	"Hero_Tinker.Laser"
-				"Target" 		"CASTER"
+				"EffectName"	"Hero_Disruptor.ThunderStrike.Cast"
+				"Target" 			"CASTER"
 			}
 		}	
+	}
+
+	// Rewrite of the Antimage Blink ability
+	// Author: Pizzalol
+	// Date: 11.07.2015.
+	// Game version: 6.84
+	"antimage_blink_datadriven"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"BaseClass"				"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES"
+		"AbilityTextureName"			"antimage_blink"
+
+		// Precache
+		//-------------------------------------------------------------------------------------------------------------
+		"precache"
+		{
+			"soundfile"		"soundevents/game_sounds_heroes/game_sounds_antimage.vsndevts"
+			"particle"		"particles/units/heroes/hero_antimage/antimage_blink_end.vpcf"
+			"particle"		"particles/units/heroes/hero_antimage/antimage_blink_start.vpcf"
+		}
+
+		// Casting
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCastPoint"				"0.1 0.1 0.1"
+
+		// Time		
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCooldown"				"7.0 6.0 5.0"
+		
+		// Cost
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityManaCost"				"55 50 45"
+		
+		// Special	
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"blink_range"			"1000 1200 1400"
+			}
+			
+			"02"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"min_blink_range"		"200"
+			}
+		}
+
+		"OnSpellStart"
+		{
+			"RunScript"
+			{
+				"ScriptFile"	"scripts/vscripts/spells/blink.lua"
+				"Function"		"Blink"
+				"Target"		"POINT"
+			}
+
+			"FireSound"
+			{
+				"EffectName"	"Hero_Antimage.Blink_out"
+				"Target"		"CASTER"
+			}
+
+			"AttachEffect"
+			{
+				"EffectName"	"particles/units/heroes/hero_antimage/antimage_blink_start.vpcf"
+				"Target"		"CASTER"
+				"EffectAttachType"	"attach_hitloc"
+			}
+
+			"FireSound"
+			{
+				"EffectName"	"Hero_Antimage.Blink_in"
+				"Target"		"CASTER"
+			}
+
+			"AttachEffect"
+			{
+				"EffectName"	"particles/units/heroes/hero_antimage/antimage_blink_end.vpcf"
+				"Target"		"CASTER"
+				"EffectAttachType"	"follow_origin"
+			}
+		}
+	}
+
+	"puck_phase_shift_datadriven"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"BaseClass"				"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_MOVEMENT | DOTA_ABILITY_BEHAVIOR_CHANNELLED | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES"
+		"AbilityTextureName"			"puck_phase_shift"
+
+		// Casting
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCastPoint"				"0 0 0 0"
+		"AbilityChannelTime"			"1.25 1.75 2.25"
+
+		// Time		
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCooldown"				"7.0 7.0 6.0"
+
+		// Cost
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityManaCost"				"60 55 50"
+
+		// Special
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"					"FIELD_FLOAT"
+				"duration"					"1.25 1.75 2.25"
+			}
+		}
+		
+		// Data driven
+		//-------------------------------------------------------------------------------------------------------------
+		"precache"
+		{
+			"soundfile"					"soundevents/game_sounds_heroes/game_sounds_puck.vsndevts"
+			"particle"					"particles/units/heroes/hero_puck/puck_phase_shift.vpcf"
+		}
+		
+		"OnSpellStart"
+		{
+			"ApplyModifier"
+			{
+				"ModifierName"	"modifier_phase_shift_datadriven"
+				"Target"		"CASTER"
+			}
+		}
+		
+		"OnChannelFinish"
+		{
+			"RemoveModifier"
+			{
+				"ModifierName"	"modifier_phase_shift_datadriven"
+				"Target"		"CASTER"
+			}
+		}
+		
+		"Modifiers"
+		{
+			"modifier_phase_shift_datadriven"
+			{
+				"Duration"		"%duration"
+				
+				"EffectName"		"particles/units/heroes/hero_puck/puck_phase_shift.vpcf"
+				"EffectAttachType"	"attach_origin"
+				
+				"OnCreated"
+				{
+					"FireSound"
+					{
+						"EffectName"	"Hero_Puck.Phase_Shift"
+						"Target"		"TARGET"
+					}
+					
+					"RunScript"
+					{
+						"ScriptFile"		"scripts/vscripts/spells/phase_shift.lua"
+						"Function"			"HideCaster"
+					}
+				}
+				
+				"OnDestroy"
+				{
+					"RunScript"
+					{
+						"ScriptFile"	"scripts/vscripts/spells/phase_shift.lua"
+						"Function"		"StopSound"
+						"Target"		"TARGET"
+						"sound_name"	"Hero_Puck.Phase_Shift"
+					}
+					
+					"RunScript"
+					{
+						"ScriptFile"		"scripts/vscripts/spells/phase_shift.lua"
+						"Function"			"ShowCaster"
+					}
+				}
+				
+				"States"
+				{
+				//	"MODIFIER_STATE_INVULNERABLE"			"MODIFIER_STATE_VALUE_ENABLED"	// Don't use these state for a channeling ability.
+				//	"MODIFIER_STATE_OUT_OF_GAME"			"MODIFIER_STATE_VALUE_ENABLED"
+				
+					"MODIFIER_STATE_ATTACK_IMMUNE"			"MODIFIER_STATE_VALUE_ENABLED"
+					"MODIFIER_STATE_MAGIC_IMMUNE"			"MODIFIER_STATE_VALUE_ENABLED"
+					"MODIFIER_STATE_UNSELECTABLE"			"MODIFIER_STATE_VALUE_ENABLED"
+					"MODIFIER_STATE_NO_HEALTH_BAR"			"MODIFIER_STATE_VALUE_ENABLED"
+				}
+			}
+		}
 	}
 }

@@ -35,11 +35,14 @@
     GameUI.CustomUIConfig().team_colors[DOTATeam_t.DOTA_TEAM_CUSTOM_7] = "#c7e40d;";
     GameUI.CustomUIConfig().team_colors[DOTATeam_t.DOTA_TEAM_CUSTOM_8] = "#8c2af4;";
 
+    
 
   </script>
 
   <Panel>
     <!-- CustomUIElements go here.  They are not provided currently as valve's parser reads commented lines and attempts to link them in.-->
     <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/barebones_hud_base.xml" /> 
+    <!-- This sets up the scoreboard for tracking player lives remaining -->
+    <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/Scoreboard.xml" />
   </Panel>
 </root>
