@@ -9,6 +9,7 @@ function Setup_ScoreBoard( data ){
 	// create primary container used for deletion process/house all
 	rootparent = $.CreatePanel ('Panel', rootparentORG, 'Primary_Container')
 	rootparent.AddClass('Primary_Container') 
+	rootparent.hittest = false
 	 
 	if (data.x != null){ 
 		//$.Msg("margin left")
@@ -35,6 +36,7 @@ function Setup_HeadersAndSection ( name, headerstate, style ){
 		var HeaderLabel = $.CreatePanel('Label', rootparent, 'Label_'+name)
 		HeaderLabel.text = name
 		HeaderLabel.AddClass('SectionHeaderText')
+		HeaderLabel.hittest = false
 		
 		if(style != null){ 
 			if(style["background-color"] != null){
@@ -52,26 +54,33 @@ function Setup_HeadersAndSection ( name, headerstate, style ){
 	
 	var SectionContainer = $.CreatePanel ('Panel', rootparent, 'Section_'+name)
 	SectionContainer.AddClass('SectionContainer')
+	SectionContainer.hittest = false
 	
 	// Create Column Header 
 	var SectionHeader = $.CreatePanel ('Panel', SectionContainer, 'Section_Header_'+name)
 	SectionHeader.AddClass('SectionHeader')
+	SectionHeader.hittest = false
+	SectionHeader.visible = false
 	
 	// Create Column Content Container
 	Section = $.CreatePanel ('Panel', SectionContainer, 'Section_Container_'+name)
 	Section.AddClass('Section')  
+	Section.hittest = false
 } 
  
 function Create_Column_Header (data){
 	$.Msg("Creating Column Headers")	
 	 
 	var Header = $.FindChildInContext('#Section_Header_'+data.header, '#HUDContainer')
+	Header.hittest = false
 	
 	var ColumnHeader = $.CreatePanel('Panel', Header, '')
-	 	
+	ColumnHeader.hittest = false
+	 
 	var ColumnHeaderLabel = $.CreatePanel('Label', ColumnHeader, '')
 	ColumnHeaderLabel.text = data.name
 	ColumnHeaderLabel.AddClass('HeaderText')
+	ColumnHeaderLabel.hittest = false
 	 
 	if (data.visible == false){
 		ColumnHeader.visible = false 
@@ -89,10 +98,12 @@ function Create_Column_Header (data){
 function Create_Column_Content( playerID, parent, name, style){ 
 	
 	var ColumnContainer = $.CreatePanel('Panel', parent, 'Section_Container_'+name)
-		
+	ColumnContainer.hittest = false
+	
 	var ColumnContent = $.CreatePanel('Label', ColumnContainer, name+"_"+playerID)
 	ColumnContent.text = "--"  
-	ColumnContent.AddClass('PlayerText')   
+	ColumnContent.AddClass('PlayerText') 
+	ColumnContent.hittest = false
 	   
 	// create column styling
 	if (style != null){  
@@ -125,6 +136,8 @@ function Create_Player_ScoreBoard ( data ){
 		$.Msg("Creating Player #" + playerID)	
 		var PlayerSection = $.CreatePanel ('Panel', parent, playerID)
 		PlayerSection.AddClass('PlayerSection')
+		PlayerSection.hittest = false
+		
 	} else{return;}
 	
 	if(data.duration != null){  
@@ -136,7 +149,7 @@ function Create_Player_ScoreBoard ( data ){
 	
 	var count = $('#Section_Header_'+data.header).GetChildCount()
 	var panelCreated = 0   
-	 
+	$('#Section_Header_'+data.header).visible = true
 	// Create Column Content
 	for (var key in data.panel){
 	//$.Msg(data.Panel) 
@@ -272,4 +285,3 @@ function HideShowPlayerScoreboard(){
 					-- Column Content
 	<------------------------------------------->
 */
-

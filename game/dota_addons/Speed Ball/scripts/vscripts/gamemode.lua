@@ -84,6 +84,7 @@ end
 function GameMode:OnHeroInGame(hero)
   DebugPrint("[BAREBONES] Hero spawned in game for first time -- " .. hero:GetUnitName())
   local teamNumber = hero:GetTeam()
+  local pID = hero:GetPlayerID()
   -- This line for example will set the starting gold of every hero to 500 unreliable gold
   hero:SetGold(250, false)
   local ability = hero:GetAbilityByIndex(0)
@@ -105,9 +106,10 @@ function GameMode:OnHeroInGame(hero)
   DebugPrint("LIVES ON SPAWN: " .. hero.lives)
   GameRules.PlayersRemaining = GameRules.PlayersRemaining + 1
 
-  -- Create the scoreboard when the first hero enters and add them to it.
-  -- All subsequent players are just added.
-  CreateAddPlayersToScoreBoard(hero)
+  
+  CreateAddPlayersToScoreBoard()
+  
+
   -- Stun all heroes until the timer says GO!
   StunPlayerUntilGameStarts(hero)
   -- Add the hero to the physics entities table to track them for collision detection
@@ -123,6 +125,10 @@ function GameMode:OnHeroInGame(hero)
   -- hero_collider.test = function(self, hero_collider, collided)
   --     return IsPhysicsUnit(collided) and collided.GetUnitName ~= nil and collided:GetUnitName() == "speedball"
   --   end
+  local teamColor = AddPlayerToScoreBoard(pID)
+  if pID > 0 then
+    ScoreBoard:Edit({key="COLUMN_HEADER", header=teamColor, visible = false})
+  end
 
 end
 
@@ -139,7 +145,7 @@ function GameMode:OnGameInProgress()
   -- attempt to cause draw distance not to fail
   SendToServerConsole("sv_cheats 1")
   SendToServerConsole("r_farz 7000")
-  SendToServerConsole("sv_cheats 0")
+  --SendToServerConsole("sv_cheats 0")
   -- set up game physics
   Physics:GenerateAngleGrid()
   
@@ -209,7 +215,7 @@ function CreateSpeedBall(locationVector)
   	speedball:AdaptiveNavGridLookahead(true)
   	speedball:SetNavCollisionType(PHYSICS_NAV_BOUNCE)
   	speedball:SetPhysicsFriction(0.02)
-  	speedball:SetPhysicsVelocityMax(4000)
+  	speedball:SetPhysicsVelocityMax(4500)
   	speedball:FollowNavMesh(true)
   	speedball:SetGroundBehavior(PHYSICS_GROUND_LOCK)
     speedball:OnPhysicsFrame(nil)
@@ -346,102 +352,155 @@ end
   call CreateAddPlayersToScoreBoard(hero) inside of OnHeroInGame(hero) to star the scoreboard manager.
 ]]
 
+local bScoreboardCreated = false
 local Team1Header, Team1Name, Team1Lives = nil
 local Team2Header, Team2Name, Team2Lives = nil
 local Team3Header, Team3Name, Team3Lives = nil -- pink
 local Team4Header, Team4Name, Team4Lives = nil -- orange
 
-function CreateAddPlayersToScoreBoard(hero)
-  local playerID = hero:GetPlayerID() 
-  -- create board if it's the first player
-  if playerID == 0 then
-    -- loop through all players and find the longest name...
-    local columnWidth = 80
-    local teamCount = 0
+function CreateAddPlayersToScoreBoard()
+  local teamsInGame = {}
+  local columnWidth = 80
+  
+  -- loop through all players and find the longest name...
+  if not bScoreboardCreated then
+    bScoreboardCreated = true;
+    
     for i = 0, 3 do
-      local name = PlayerResource:GetPlayerName(i)
-      DebugPrint("NAME: " .. name)
-      DebugPrint("NAME TYPE: " .. tostring(type(name)))
+      local name = PlayerResource:GetPlayerName(i) -- get the first 4 player names
       if name ~= "" and name ~= nil then
-        teamCount = teamCount + 1
-        DebugPrint("TeamCount " .. tostring(teamCount))
+        DebugPrint("NAME: " .. name or tostring("NO NAME"))
+        teamsInGame[PlayerResource:GetTeam(i)] = "" -- set their team in game = true in an odd way... expect: teamsInGame[2] = ""
+        DebugPrint("PLAYER TEAM NUMBER: " .. tostring(PlayerResource:GetTeam(i)))
         local len = string.len(name) * 12
         if len > columnWidth then
           columnWidth = len
         end
       end
     end
-    SetupBoard(tostring(columnWidth) .. "px")
-    CreateColumnHeaders(teamCount)
-  end
-  
+    SetupBoard(tostring(columnWidth) .. "px", teamsInGame)
+    CreateColumnHeaders(teamsInGame)
+  end  
+end
+
+function AddPlayerToScoreBoard(pID)
   -- create player under the correct team using team ID's
-  if PlayerResource:GetTeam(playerID) == 2 then
-    ScoreBoard:CreatePlayer({playerID=playerID, header="Teal"})   
-  elseif PlayerResource:GetTeam(playerID) == 3 then
-    ScoreBoard:CreatePlayer({playerID=playerID, header="Yellow"})
-  elseif PlayerResource:GetTeam(playerID) == 6 then
-    ScoreBoard:CreatePlayer({playerID=playerID, header="Pink"})
-  elseif PlayerResource:GetTeam(playerID) == 7 then
-    ScoreBoard:CreatePlayer({playerID=playerID, header="Orange"})
+  local colorAdded = ""
+  DebugPrint("Player TEAM: " .. tostring(PlayerResource:GetTeam(pID)))
+  if PlayerResource:GetTeam(pID) == 2 then
+    ScoreBoard:CreatePlayer({playerID=pID, header="Teal"})  
+    colorAdded = "Teal" 
+  elseif PlayerResource:GetTeam(pID) == 3 then
+    ScoreBoard:CreatePlayer({playerID=pID, header="Yellow"})
+    colorAdded = "Yellow"
+  elseif PlayerResource:GetTeam(pID) == 6 then
+    ScoreBoard:CreatePlayer({playerID=pID, header="Pink"})
+    colorAdded = "Pink"
+  elseif PlayerResource:GetTeam(pID) == 7 then
+    ScoreBoard:CreatePlayer({playerID=pID, header="Orange"})
+    colorAdded = "Orange"
   end
 
-  -- update player ever second
-  Timers:CreateTimer(function()
-    local playerName = PlayerResource:GetPlayerName(playerID) -- returns player name(does not work in tools)
-    local level = hero:GetLevel() -- returns hero level 
-    ScoreBoard:Update( {key="PLAYER", ID=playerID, panel={ "Name", "Lives"}, paneltext={playerName,  GameRules.PLAYER_LIVES[playerID]}})    
+  Timers:CreateTimer(5,function()
+    local playerName = PlayerResource:GetPlayerName(pID) -- returns player name(does not work in tools)
+    DebugPrint("Update Player Lives " .. playerName .. " ID: " .. tostring(pID) )
+    ScoreBoard:Update( {key="PLAYER", ID=pID, panel={"Name", "Lives"}, paneltext={playerName,  GameRules.PLAYER_LIVES[pID]}})    
     return 1
   end)
+  return colorAdded
 end
 
-function SetupBoard(columnWidth)
--- styling tables
-   Team1Header= {height="100%", width="120px", color="teal",  ["border-radius"]="3px"}
-   Team1Name= {height="100%", width= columnWidth, color="black",   ["background-color"]="teal",  ["border-radius"]="3px"}
-   Team1Lives= {height="100%", width="48px", color="black",   ["background-color"]="teal",  ["border-radius"]="3px"}
+function SetupBoard(columnWidth, teamsInGame)
+  -- Default styling tables
+  Team1Header= {height="100%", width="120px", color="teal",  ["border-radius"]="3px"}
+  Team1Name= {height="100%", width= columnWidth, color="black",   ["background-color"]="teal",  ["border-radius"]="3px"}
+  Team1Lives= {height="100%", width="48px", color="black",   ["background-color"]="teal",  ["border-radius"]="3px"}
 
-   Team2Header= {height="100%", width="64px", color="yellow", ["border-radius"]="3px"}
-   Team2Name ={height="100%", width= columnWidth, color="black", ["background-color"]="yellow",  ["border-radius"]="3px"}
-   Team2Lives= {height="100%", width="48px", color="black",   ["background-color"]="yellow",  ["border-radius"]="3px"}
+  Team2Header= {height="100%", width="64px", color="yellow", ["border-radius"]="3px"}
+  Team2Name ={height="100%", width= columnWidth, color="black", ["background-color"]="yellow",  ["border-radius"]="3px"}
+  Team2Lives= {height="100%", width="48px", color="black",   ["background-color"]="yellow",  ["border-radius"]="3px"}
 
-   Team3Header= {height="100%", width="64px", color="pink", ["border-radius"]="3px"}
-   Team3Name ={height="100%", width= columnWidth, color="black", ["background-color"]="pink",  ["border-radius"]="3px"}
-   Team3Lives= {height="100%", width="48px", color="black",   ["background-color"]="pink",  ["border-radius"]="3px"}
+  Team3Header= {height="100%", width="64px", color="pink", ["border-radius"]="3px"}
+  Team3Name ={height="100%", width= columnWidth, color="black", ["background-color"]="pink",  ["border-radius"]="3px"}
+  Team3Lives= {height="100%", width="48px", color="black",   ["background-color"]="pink",  ["border-radius"]="3px"}
 
-   Team4Header= {height="100%", width="64px", color="orange", ["border-radius"]="3px"}
-   Team4Name ={height="100%", width= columnWidth, color="black", ["background-color"]="orange",  ["border-radius"]="3px"}
-   Team4Lives= {height="100%", width="48px", color="black",   ["background-color"]="orange",  ["border-radius"]="3px"}
+  Team4Header= {height="100%", width="64px", color="orange", ["border-radius"]="3px"}
+  Team4Name ={height="100%", width= columnWidth, color="black", ["background-color"]="orange",  ["border-radius"]="3px"}
+  Team4Lives= {height="100%", width="48px", color="black",   ["background-color"]="orange",  ["border-radius"]="3px"}
 
-   -- setup main scoreboard
-   ScoreBoard:Setup({header={"Teal", "Yellow", "Pink", "Orange"}, x="10px", headertext={true, true}, headerstyle={Team1Header, Team2Header, Team3Header, Team4Header}})
-   
-   -- hide header
-   --ScoreBoard:Edit({key="COLUMN_HEADER", header="Teal", visible = false})
-   --ScoreBoard:Edit({key="COLUMN_HEADER", header="Yellow", visible = false})
-   
-   -- style container
-   ScoreBoard:Edit({key="CONTAINER", style={["margin-left"]="50px", ["background-color"]="black"}})
+  local scoreboardStyle = {}
+   -- setup scoreboard headers based on which team slots have been chosen
+   -- if teams exist
+  if next(teamsInGame) ~= nil then
+    for i = 2, 7 do
+      if teamsInGame[i] == "" then -- find which teams have players expect teamsinGame[2] = "" (2, 3, 6, 7)
+        if i == 2 then
+          teamsInGame[i] = "Teal" -- teamsInGame[2] = "Teal"
+          table.insert(scoreboardStyle, Team1Header)
+        elseif i == 3 then
+          teamsInGame[i] = "Yellow" -- teamsInGame[3] = "Yellow"
+          table.insert(scoreboardStyle, Team2Header)
+        elseif i == 6 then
+          teamsInGame[i] = "Pink" -- teamsInGame[6] = "Pink"
+          table.insert(scoreboardStyle, Team3Header)
+        elseif i == 7 then
+          teamsInGame[i] = "Orange" -- teamsInGame[7] = "Orange"
+          table.insert(scoreboardStyle, Team4Header)
+        end
+      end
+    end
+    DebugPrint("Scoreboard Style: ")
+    DebugPrintTable(scoreboardStyle)
+  end
+  -- with 4 players:
+  -- scoreboardStyle = { Team1Header, Team2Header, Team3Header, Team4Header }
+
+  local headerTeams = ""
+  local headerTBL = {}
+  for i = 2, 7 do
+    if teamsInGame[i] == "Teal" or teamsInGame[i] == "Yellow" or teamsInGame[i] == "Pink" or teamsInGame[i] == "Orange" then --~= "" and teamsInGame[i] ~= nil then
+      table.insert(headerTBL, teamsInGame[i])
+    end      
+  end
+  -- header = {"Teal", "Yellow", "Pink", "Orange"}
+  ScoreBoard:Setup({header=headerTBL, x="10px", headertext={true, true}, headerstyle=scoreboardStyle})
+  -- style container
+  ScoreBoard:Edit({key="CONTAINER", style={["margin-left"]="50px", ["background-color"]="black"}})
 end
 
 
-function CreateColumnHeaders(teamCount)
-  DebugPrint("TEAM COUNT " .. tostring(teamCount))
+function CreateColumnHeaders(teamsInGame)
+  local teal = false
+  local yellow = false
+  local pink = false
+  local orange = false
 
-  ScoreBoard:CreateColumnHeader({name="Name",     header="Teal", visible=true, style=Team1Name})
-  ScoreBoard:CreateColumnHeader({name="Lives",    header="Teal", visible=true, style=Team1Lives})
+  teal = teamsInGame[2] == "Teal"
+  yellow = teamsInGame[3] == "Yellow"
+  pink = teamsInGame[6] == "Pink"
+  orange = teamsInGame[7] == "Orange"
 
+  DebugPrint("teal: " .. tostring(teal))
+  DebugPrint("yellow: " .. tostring(yellow))
+  DebugPrint("pink: " .. tostring(pink))
+  DebugPrint("orange: " .. tostring(orange))
 
-  ScoreBoard:CreateColumnHeader({name="Name",     header="Yellow", visible=true, style=Team2Name})
-  ScoreBoard:CreateColumnHeader({name="Lives",    header="Yellow", visible=true, style=Team2Lives})        
-
-
-  ScoreBoard:CreateColumnHeader({name="Name",     header="Pink", visible=true, style=Team3Name})
-  ScoreBoard:CreateColumnHeader({name="Lives",    header="Pink", visible=true, style=Team3Lives})
-
-  ScoreBoard:CreateColumnHeader({name="Name",     header="Orange", visible=true, style=Team4Name})
-  ScoreBoard:CreateColumnHeader({name="Lives",    header="Orange", visible=true, style=Team4Lives})
-
+  if teal then
+    ScoreBoard:CreateColumnHeader({name="Name",     header="Teal", visible=true, style=Team1Name})
+    ScoreBoard:CreateColumnHeader({name="Lives",    header="Teal", visible=true, style=Team1Lives})
+  end
+  if yellow then
+    ScoreBoard:CreateColumnHeader({name="Name",     header="Yellow", visible=true, style=Team2Name})
+    ScoreBoard:CreateColumnHeader({name="Lives",    header="Yellow", visible=true, style=Team2Lives})        
+  end
+  if pink then
+    ScoreBoard:CreateColumnHeader({name="Name",     header="Pink", visible=true, style=Team3Name})
+    ScoreBoard:CreateColumnHeader({name="Lives",    header="Pink", visible=true, style=Team3Lives})
+  end
+  if orange then
+    ScoreBoard:CreateColumnHeader({name="Name",     header="Orange", visible=true, style=Team4Name})
+    ScoreBoard:CreateColumnHeader({name="Lives",    header="Orange", visible=true, style=Team4Lives})
+  end
 end
 
 -----------------------------------------
