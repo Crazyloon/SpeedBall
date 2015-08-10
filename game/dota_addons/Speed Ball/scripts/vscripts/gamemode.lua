@@ -142,10 +142,11 @@ function GameMode:OnGameInProgress()
 
   
 
-  -- attempt to cause draw distance not to fail
-  SendToServerConsole("sv_cheats 1")
-  SendToServerConsole("r_farz 7000")
+  -- attempt to cause draw distance not to fail (doesn't work usually)
+  --SendToServerConsole("sv_cheats 1")
+  --SendToServerConsole("r_farz 7000")
   --SendToServerConsole("sv_cheats 0")
+
   -- set up game physics
   Physics:GenerateAngleGrid()
   

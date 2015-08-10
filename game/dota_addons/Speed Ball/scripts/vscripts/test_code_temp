@@ -1,0 +1,98 @@
+-- THIS FILE CONTAINS CODE THAT I MAY WANT TO USE AGAIN AT SOME POINT
+
+
+------------------------------------------------------------------------------------------------
+-- THIS BLOCK SETS UP STYLES AND HEADERS FOR THE SCOREBOARD BASED ON WHICH TEAMS HAVE PLAYERS --
+------------------------------------------------------------------------------------------------
+-- local scoreboardStyle = {}
+  --  -- setup scoreboard headers based on which team slots have been chosen
+  --  -- if teams exist
+  -- if next(teamsInGame) ~= nil then
+  --   for i = 2, 7 do
+  --     if teamsInGame[i] == "" then -- find which teams have players expect teamsinGame[2] = "" (2, 3, 6, 7)
+  --       if i == 2 then
+  --         teamsInGame[i] = "Teal" -- teamsInGame[2] = "Teal"
+  --         table.insert(scoreboardStyle, Team1Header)
+  --       elseif i == 3 then
+  --         teamsInGame[i] = "Yellow" -- teamsInGame[3] = "Yellow"
+  --         table.insert(scoreboardStyle, Team2Header)
+  --       elseif i == 6 then
+  --         teamsInGame[i] = "Pink" -- teamsInGame[6] = "Pink"
+  --         table.insert(scoreboardStyle, Team3Header)
+  --       elseif i == 7 then
+  --         teamsInGame[i] = "Orange" -- teamsInGame[7] = "Orange"
+  --         table.insert(scoreboardStyle, Team4Header)
+  --       end
+  --     end
+  --   end
+  --   DebugPrint("Scoreboard Style: ")
+  --   DebugPrintTable(scoreboardStyle)
+  -- end
+  -- -- with 4 players:
+  -- -- scoreboardStyle = { Team1Header, Team2Header, Team3Header, Team4Header }
+
+  -- local headerTeams = ""
+  -- local headerTBL = {}
+  -- for i = 2, 7 do
+  --   if teamsInGame[i] == "Teal" or teamsInGame[i] == "Yellow" or teamsInGame[i] == "Pink" or teamsInGame[i] == "Orange" then --~= "" and teamsInGame[i] ~= nil then
+  --     table.insert(headerTBL, teamsInGame[i])
+  --   end      
+  -- end
+  -- header = {"Teal", "Yellow", "Pink", "Orange"}
+
+
+  ---------------------------------------------------------------------------------------------
+  -- THIS BLOCK LOOPS THROUGH PLAYERS WITH ID 0 THROUGH 3, AND GETS THE LENGTH OF THEIR NAME -- 
+  ---------------------------------------------------------------------------------------------
+  -- loop through all players and find the longest name so we can properly size the scoreboard
+  -- Also, gather team numbers to see who's playing so we can just show the colors we want.
+   
+  -- for i = 0, 3 do
+  --   local name = PlayerResource:GetPlayerName(i) -- get the first 4 player names
+  --   if name ~= "" and name ~= nil then
+  --     DebugPrint("NAME: " .. name or tostring("NO NAME"))
+  --     teamsInGame[PlayerResource:GetTeam(i)] = "" -- set their team in game = true in an odd way... expect: teamsInGame[2] = ""
+  --     DebugPrint("PLAYER TEAM NUMBER: " .. tostring(PlayerResource:GetTeam(i)))
+  --     local len = string.len(name) * 12
+  --     if len > columnWidth then
+  --       columnWidth = len
+  --     end
+  --   end
+  -- end
+
+  --------------------------------------------------------------------------------------------
+  -- THIS BLOCK CHECKS WHICH TEAMS HAVE PLAYERS BASED ON A LIST OF TEAMSINGAME THEN CREATES --
+  -- COLUMN HEADERS FOR EACH COLOR/TEAM ------------------------------------------------------ 
+  --------------------------------------------------------------------------------------------
+
+  local teal = false
+  local yellow = false
+  local pink = false
+  local orange = false
+
+  teal = teamsInGame[2] == "Teal"
+  yellow = teamsInGame[3] == "Yellow"
+  pink = teamsInGame[6] == "Pink"
+  orange = teamsInGame[7] == "Orange"
+
+  DebugPrint("teal: " .. tostring(teal))
+  DebugPrint("yellow: " .. tostring(yellow))
+  DebugPrint("pink: " .. tostring(pink))
+  DebugPrint("orange: " .. tostring(orange))
+
+  if true then
+    ScoreBoard:CreateColumnHeader({name="Name",     header="Teal", visible=true, style=Team1Name})
+    ScoreBoard:CreateColumnHeader({name="Lives",    header="Teal", visible=true, style=Team1Lives})
+  end
+  if true then
+    ScoreBoard:CreateColumnHeader({name="Name",     header="Yellow", visible=true, style=Team2Name})
+    ScoreBoard:CreateColumnHeader({name="Lives",    header="Yellow", visible=true, style=Team2Lives})        
+  end
+  if true then
+    ScoreBoard:CreateColumnHeader({name="Name",     header="Pink", visible=true, style=Team3Name})
+    ScoreBoard:CreateColumnHeader({name="Lives",    header="Pink", visible=true, style=Team3Lives})
+  end
+  if true then
+    ScoreBoard:CreateColumnHeader({name="Name",     header="Orange", visible=true, style=Team4Name})
+    ScoreBoard:CreateColumnHeader({name="Lives",    header="Orange", visible=true, style=Team4Lives})
+  end
