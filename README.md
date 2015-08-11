@@ -1,8 +1,6 @@
 # SpeedBall
 SpeedBall for DotA 2: a WC3 Remake
 
-SpeedBall: A game port from WC3 -> DotA 2
-
 Original Gameplay: https://www.youtube.com/watch?v=00_Uifu7X-8
 
 =====================
